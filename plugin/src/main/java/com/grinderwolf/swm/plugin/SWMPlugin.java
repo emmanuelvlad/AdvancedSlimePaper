@@ -141,7 +141,7 @@ public class SWMPlugin extends JavaPlugin implements SlimePlugin, Listener {
                 });
 
         this.getServer().getPluginManager().registerEvents(this, this);
-        this.getServer().getPluginManager().registerEvents(new WorldUnlocker(), this);
+//        this.getServer().getPluginManager().registerEvents(new WorldUnlocker(), this);
         //loadedWorlds.clear // - Commented out because not sure why this would be cleared. Needs checking
     }
 
