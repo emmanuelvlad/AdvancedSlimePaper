@@ -1639,6 +1639,7 @@ index 0000000000000000000000000000000000000000..44b540b924f35ca3e535035b3539793c
 +import ca.spottedleaf.concurrentutil.executor.standard.PrioritisedExecutor;
 +import com.google.common.util.concurrent.ThreadFactoryBuilder;
 +import com.infernalsuite.aswm.Converter;
++import com.infernalsuite.aswm.api.events.AsyncPostSaveWorldEvent;
 +import com.infernalsuite.aswm.serialization.slime.SlimeSerializer;
 +import com.infernalsuite.aswm.api.world.SlimeChunk;
 +import com.infernalsuite.aswm.api.world.SlimeWorld;
@@ -1789,7 +1790,10 @@ index 0000000000000000000000000000000000000000..44b540b924f35ca3e535035b3539793c
 +                try {
 +                    byte[] serializedWorld = SlimeSerializer.serialize(world);
 +                    long saveStart = System.currentTimeMillis();
-+                    slimeWorld.getSaveStrategy().saveWorld(slimeWorld.getName(), serializedWorld);
++                    // If bukkitWorld is null that means the world was unloaded previously
++                    // and the loader should release the lock.
++                    var bukkitWorld = Bukkit.getWorld(slimeWorld.getName());
++                    slimeWorld.getSaveStrategy().saveWorld(slimeWorld.getName(), serializedWorld, bukkitWorld == null);
 +                    Bukkit.getLogger().log(Level.INFO, "World " + slimeWorld.getName() + " serialized in " + (saveStart - start) + "ms and saved in " + (System.currentTimeMillis() - saveStart) + "ms.");
 +                } catch (IOException | IllegalStateException ex) {
 +                    ex.printStackTrace();
